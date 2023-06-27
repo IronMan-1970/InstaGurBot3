@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
-from instagrapi import Client
+
 import tkinter as tk
 
 from shell import cli
-from tags import App
+from gui import App
 
 
 
@@ -15,5 +15,5 @@ def main():
 
 
 if __name__ == "__main__":
-    cli()
+
     main()
