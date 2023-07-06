@@ -114,18 +114,6 @@ class App:
 
 
 
-        self.show_generated=tk.Button(root)
-        self.show_generated["bg"] = "#efefef"
-        ft = tkFont.Font(family='Times',size=10)
-        self.show_generated["font"] = ft
-        self.show_generated["fg"] = "#000000"
-        self.show_generated["justify"] = "center"
-        self.show_generated["text"] = "Без відповідей"
-        self.show_generated.place(x=400,y=210,width=100,height=25)
-        self.show_generated["command"] = self.show_generated_command #commentPostButton_command_with_reply
-
-
-
         self.subjectLabel=tk.Label(root)
         ft = tkFont.Font(family='Times',size=14)
         self.subjectLabel["font"] = ft
@@ -202,13 +190,22 @@ class App:
         self.subjectPostEntry["justify"] = "center"
         self.subjectPostEntry.place(x=20,y=510,width=204,height=30)
 
-        self.coment_check_entery = tk.Entry(root)
+        self.coment_check_entery_Label = tk.Label(root)
+        ft = tkFont.Font(family='Times', size=14)
+        self.coment_check_entery_Label["font"] = ft
+        self.coment_check_entery_Label["fg"] = "#333333"
+        self.coment_check_entery_Label["justify"] = "center"
+        self.coment_check_entery_Label["text"] = "Відповідь чата GPT"
+        self.coment_check_entery_Label.place(x=270, y=200, width=308, height=62)
+
+        self.coment_check_entery = tk.Text()
+        self.coment_check_entery.pack()
+        self.coment_check_entery.grid(column=1, row=20)
         self.coment_check_entery["borderwidth"] = "1px"
         ft = tkFont.Font(family='Times', size=10)
         self.coment_check_entery["font"] = ft
-        self.coment_check_entery["fg"] = "#333333"
-        self.coment_check_entery["justify"] = "center"
-        self.coment_check_entery.place(x=200, y=250, width=308, height=32)
+        self.coment_check_entery.place(x=270, y=250, width=308, height=62)
+
 
         self.regenerate = tk.Button(root)
         self.regenerate["bg"] = "#efefef"
@@ -216,8 +213,8 @@ class App:
         self.regenerate["font"] = ft
         self.regenerate["fg"] = "#000000"
         self.regenerate["justify"] = "center"
-        self.regenerate["text"] = "регенерувати"
-        self.regenerate.place(x=300, y=300, width=100, height=25)
+        self.regenerate["text"] = "Згенерувати"
+        self.regenerate.place(x=270, y=330, width=100, height=25)
         self.regenerate["command"] = self.regenerate_command  # commentPostButton_command_with_reply
 
         self.post_without_replays = tk.Button(root)
@@ -227,7 +224,7 @@ class App:
         self.post_without_replays["fg"] = "#000000"
         self.post_without_replays["justify"] = "center"
         self.post_without_replays["text"] = "запостити без відповідей"
-        self.post_without_replays.place(x=400, y=300, width=100, height=25)
+        self.post_without_replays.place(x=375, y=330, width=100, height=25)
         self.post_without_replays["command"] = self.post_without_replays_command  # commentPostButton_command_with_reply
 
         self.post_with_replays = tk.Button(root)
@@ -237,9 +234,27 @@ class App:
         self.post_with_replays["fg"] = "#000000"
         self.post_with_replays["justify"] = "center"
         self.post_with_replays["text"] = "запостити з відповідями"
-        self.post_with_replays.place(x=500, y=300, width=100, height=25)
+        self.post_with_replays.place(x=480, y=330, width=100, height=25)
         self.post_with_replays["command"] = self.post_with_replays_command  # commentPostButton_command_with_reply
 
+
+
+        self.key_for_GPT_API_Label=tk.Label(root)
+        ft = tkFont.Font(family='Times',size=14)
+        self.key_for_GPT_API_Label["font"] = ft
+        self.key_for_GPT_API_Label["fg"] = "#333333"
+        self.key_for_GPT_API_Label["justify"] = "center"
+        self.key_for_GPT_API_Label["text"] = "Ключ для чату GPT"
+        self.key_for_GPT_API_Label.place(x=270,y=370,width=308,height=25)
+
+
+        self.key_for_GPT_API=tk.Entry(root)
+        self.key_for_GPT_API["borderwidth"] = "1px"
+        ft = tkFont.Font(family='Times',size=10)
+        self.key_for_GPT_API["font"] = ft
+        self.key_for_GPT_API["fg"] = "#333333"
+        self.key_for_GPT_API["justify"] = "center"
+        self.key_for_GPT_API.place(x=270,y=400,width=308,height=32)
 
     def userAddButton_command(self):
         file = open("users.txt", "a")
@@ -247,7 +262,7 @@ class App:
         file.close()
     def createButton_command(self):
         strings = read_accounts()
-        answer = work_with_chat_GPT(self.subjectPostEntry)
+        answer = work_with_chat_GPT(self.subjectPostEntry,self.key_for_GPT_API)
         photo_url = self.imageLinkEntry.get()+""
         save_path = "photos/photo.jpg"
         download_photo(photo_url, save_path)
@@ -260,16 +275,12 @@ class App:
 
         delete_photo("photos/photo.jpg")
 
-
-    def show_generated_command(self):
-        answer = work_with_chat_GPT(self.subjectEntry)
-        self.coment_check_entery.insert(tk.END, answer)
-
     def regenerate_command(self):
-        answer = work_with_chat_GPT(self.subjectEntry)
+        self.coment_check_entery.insert(tk.END, "")
+        answer = work_with_chat_GPT(self.subjectEntry,self.key_for_GPT_API)
         self.coment_check_entery.insert(tk.END, answer)
     def post_without_replays_command(self):
-        answer = self.coment_check_entery.get()
+        answer = self.coment_check_entery.get("1.0", "end-1c")
         strings = read_accounts()
         print(len(strings))
         if int(self.addBotCountEntry.get()) <= len(strings):
@@ -298,7 +309,7 @@ class App:
             print("похибка")
 
     def post_with_replays_command(self) -> object:
-        answer =  self.coment_check_entery.get()
+        answer = self.coment_check_entery.get("1.0", "end-1c")
         strings = read_accounts()
         print(len(strings))
         if int(self.addBotCountEntry.get()) <= len(strings):
@@ -310,6 +321,7 @@ class App:
             comment.dict()
 
             for i in range(int(self.addBotCountEntry.get()), 0, -1):
+                print (i)
                 cl.login(strings[i][0], strings[i][1])
                 random_number1 = random.randint(1, 2)
                 if random_number1 == 1:

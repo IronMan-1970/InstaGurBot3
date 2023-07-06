@@ -2,7 +2,6 @@
 
 import tkinter as tk
 
-from shell import cli
 from gui import App
 
 
