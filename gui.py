@@ -292,14 +292,16 @@ class App:
             comment = cl.media_comment(media_id, answer)
             comment.dict()
 
-            for i in range(int(self.addBotCountEntry.get()), 0, -1):
-                cl.login(strings[i][0], strings[i][1])
+            for i in range(int(self.addBotCountEntry.get()) - 1, 0, -1):
+                print(i)
+                cl1 = Client()
+                cl1.login(strings[i][0], strings[i][1])
                 random_number1 = random.randint(1, 2)
                 if random_number1 == 1:
-                    comment1 = cl.media_comment(media_id, work_with_chat_GPT_coments(
+                    comment1 = cl1.media_comment(media_id, work_with_chat_GPT_coments(
                         "напиши аргументованый очень краткий комент подержки в ответ" + answer))
                 else:
-                    comment1 = cl.media_comment(media_id, work_with_chat_GPT_coments(
+                    comment1 = cl1.media_comment(media_id, work_with_chat_GPT_coments(
                         "напиши краткий грубый  комент в ответ очень краткий опровергает позию " + answer))
                 print(comment.pk)
                 comment.dict()
@@ -320,21 +322,23 @@ class App:
             comment = cl.media_comment(media_id, answer)
             comment.dict()
 
-            for i in range(int(self.addBotCountEntry.get()), 0, -1):
-                print (i)
-                cl.login(strings[i][0], strings[i][1])
+            for i in range(int(self.addBotCountEntry.get()) - 1, 0, -1):
+                print(i)
+                cl1 = Client()
+                cl1.login(strings[i][0], strings[i][1])
                 random_number1 = random.randint(1, 2)
                 if random_number1 == 1:
-                    comment1 = cl.media_comment(media_id, work_with_chat_GPT_coments(
+                    comment1 = cl1.media_comment(media_id, work_with_chat_GPT_coments(
                         "напиши аргументованый очень краткий комент подержки в ответ" + answer),
                                                 replied_to_comment_id=comment.pk)
                 else:
-                    comment1 = cl.media_comment(media_id, work_with_chat_GPT_coments(
+                    comment1 = cl1.media_comment(media_id, work_with_chat_GPT_coments(
                         "напиши краткий грубый  комент в ответ очень краткий опровергает позию " + answer),
                                                 replied_to_comment_id=comment.pk)
                 print(comment.pk)
                 comment.dict()
                 delay = random.randint(1, 10)
                 time.sleep(delay)
+
         else:
             print("похибка")
